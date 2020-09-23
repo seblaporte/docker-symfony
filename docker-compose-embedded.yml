@@ -5,6 +5,7 @@ networks:
 
 volumes:
     database:
+    symfony:
 
 services:
     db:
@@ -20,12 +21,9 @@ services:
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
     php:
-        build:
-            context: php7-fpm
-            args:
-                TIMEZONE: ${TIMEZONE}
+        image: hello-symfony
         volumes:
-            - ${SYMFONY_APP_PATH}:/var/www/symfony
+            - symfony:/var/www/symfony
             - ./logs/symfony:/var/www/symfony/var/log
         networks:
             - symfony
@@ -37,7 +35,7 @@ services:
         ports:
             - 80:80
         volumes:
-            - ${SYMFONY_APP_PATH}:/var/www/symfony
+            - symfony:/var/www/symfony
             - ./logs/nginx/:/var/log/nginx
         networks:
             - symfony
